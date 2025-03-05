@@ -2,13 +2,13 @@ import { NextFunction, Request, Response } from "express";
 
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { verifyUser } from "../../components/v1/userComponent";
+import { createUser, verifyUser } from "../../components/v1/userComponent";
 import { AppError, HttpStatusCode } from "../../types/errors";
 import {
   LoginRequestSchema,
   RefreshTokenRequestSchema,
+  VerifyOtpRequestSchema,
 } from "../../types/request.types";
-import { saveRefreshToken, verifyRefreshToken } from "../../config/redisClient";
 
 export const login = async (
   req: Request,
@@ -66,19 +66,37 @@ export const login = async (
         Number(process.env.REFRESH_TOKEN_EXPIRESIN),
     };
     const token = jwt.sign(data, jwtSecretKey);
-    const refreshToken = jwt.sign(refreshData, jwtRefreshKey);
-    saveRefreshToken(
-      refreshToken,
-      user._id,
-      Number(process.env.REFRESH_TOKEN_EXPIRESIN)
-    );
+    
 
     res.status(HttpStatusCode.OK).json({
       status: "success",
       token,
-      refreshToken,
       name: user.name,
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const register = async (req, res, next) => {
+  try {
+    const validatedData = VerifyOtpRequestSchema.parse(req.body);
+    const { email, otp, password, name } = validatedData;
+
+
+    const result = await createUser(name, email, password);
+    if (result) {
+      res.status(HttpStatusCode.OK).json({
+        status: "otpSuccess",
+        message: "User Created",
+      });
+    }
+
+    throw new AppError(
+      HttpStatusCode.INTERNAL_SERVER,
+      "user_creation_failed",
+      "Failed to create user"
+    );
   } catch (error) {
     next(error);
   }

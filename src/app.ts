@@ -14,7 +14,7 @@ app.use(securityMiddlewares.cors());
 
 
 app.use(express.json());
-app.use("/v1", appRoutes);
+// app.use("/v1", appRoutes);
 
 app.get("/healthCheck", (req: Request, res: Response) => {
   res.send("Wandernest-api is up and running!");
