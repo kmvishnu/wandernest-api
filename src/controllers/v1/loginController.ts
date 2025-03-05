@@ -6,8 +6,7 @@ import { createUser, verifyUser } from "../../components/v1/userComponent";
 import { AppError, HttpStatusCode } from "../../types/errors";
 import {
   LoginRequestSchema,
-  RefreshTokenRequestSchema,
-  VerifyOtpRequestSchema,
+  VerifyRegisterSchema,
 } from "../../types/request.types";
 
 export const login = async (
@@ -40,7 +39,6 @@ export const login = async (
     }
 
     const jwtSecretKey = process.env.JWT_SECRET_KEY;
-    const jwtRefreshKey = process.env.JWT_REFRESH_KEY;
     if (!jwtSecretKey) {
       throw new AppError(
         HttpStatusCode.INTERNAL_SERVER,
@@ -53,25 +51,18 @@ export const login = async (
       time: Date(),
       name: user.name,
       id: user.id,
+      email:user.email,
       exp:
         Math.floor(Date.now() / 1000) + Number(process.env.EXPIRESIN || "3600"),
     };
 
-    const refreshData = {
-      time: Date(),
-      name: user.name,
-      id: user._id,
-      exp:
-        Math.floor(Date.now() / 1000) +
-        Number(process.env.REFRESH_TOKEN_EXPIRESIN),
-    };
     const token = jwt.sign(data, jwtSecretKey);
     
 
     res.status(HttpStatusCode.OK).json({
       status: "success",
       token,
-      name: user.name,
+      user: {id: user.id, name: user.name, email: user.email},
     });
   } catch (error) {
     next(error);
@@ -80,13 +71,20 @@ export const login = async (
 
 export const register = async (req, res, next) => {
   try {
-    const validatedData = VerifyOtpRequestSchema.parse(req.body);
-    const { email, otp, password, name } = validatedData;
+    const validatedData = VerifyRegisterSchema.parse(req.body);
+    const { email, password, name } = validatedData;
 
+    const existingUser = await verifyUser(email);
+    if (existingUser) {
+      return res.status(HttpStatusCode.BAD_REQUEST).json({
+        status: "error",
+        message: "User already exists with this email",
+      });
+    }
 
     const result = await createUser(name, email, password);
     if (result) {
-      res.status(HttpStatusCode.OK).json({
+      return res.status(HttpStatusCode.OK).json({
         status: "otpSuccess",
         message: "User Created",
       });
@@ -101,4 +99,5 @@ export const register = async (req, res, next) => {
     next(error);
   }
 };
+
 
