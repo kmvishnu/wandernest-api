@@ -1,5 +1,4 @@
 import bcrypt from "bcryptjs";
-import User from "../../models/User";
 import { UserService } from '../../users.service'
 import { AppError, HttpStatusCode } from "../../types/errors";
 
