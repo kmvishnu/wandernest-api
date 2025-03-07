@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import { UserService } from '../../users.service'
+import { UserService } from '../../services/users.service'
 import { AppError, HttpStatusCode } from "../../types/errors";
 
 export const verifyUser = async (email: string) => {
@@ -41,7 +41,11 @@ export const createUser = async (
     return true;
   } catch (error) {
     console.error("Error creating user:", error);
-    return false;
+    throw new AppError(
+      HttpStatusCode.INTERNAL_SERVER,
+      "database_error",
+      "Failed to create user"
+    );
   }
 };
 

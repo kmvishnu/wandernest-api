@@ -20,3 +20,19 @@ model User {
   password  String
   createdAt DateTime @default(now())
 }
+
+model Hotel {
+  id             String   @id @default(uuid())
+  name           String
+  description    String
+  location       String
+  price          Float
+  contact        String
+  rating         Float
+  totalRooms     Int
+  availableRooms Int
+  imageUrls      String[]
+  amenities      String[]
+  policies       String[]
+  reviews        String[]
+}
