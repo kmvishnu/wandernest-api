@@ -1,19 +1,19 @@
-import prisma from '../db'
+import prisma from "../db";
 
 export class HotelService {
   async createHotel(data: {
-    name: string, 
-    description: string,
-    location: string,
-    price: number,
-    contact: string,
-    rating: number,
-    totalRooms: number,
-    availableRooms: number,
-    imageUrls: string[],  // Changed from imageUrl to imageUrls (array)
-    amenities: string[],
-    policies: string[],
-    reviews: string[]
+    name: string;
+    description: string;
+    location: string;
+    price: number;
+    contact: string;
+    rating: number;
+    totalRooms: number;
+    availableRooms: number;
+    imageUrls: string[];
+    amenities: string[];
+    policies: string[];
+    reviews: string[];
   }) {
     return prisma.hotel.create({
       data: {
@@ -28,26 +28,26 @@ export class HotelService {
         imageUrls: data.imageUrls,
         amenities: data.amenities,
         policies: data.policies,
-        reviews: data.reviews
-      }
-    })
+        reviews: data.reviews,
+      },
+    });
   }
 
   async getHotelById(id: string) {
     return prisma.hotel.findUnique({
-      where: { id }
-    })
+      where: { id },
+    });
   }
 
   async getHotelByName(name: string) {
     return prisma.hotel.findMany({
-      where: { name }
-    })
+      where: { name },
+    });
   }
 
   async getHotelByLocation(location: string) {
     return prisma.hotel.findMany({
-      where: { location }
-    })
+      where: { location },
+    });
   }
 }

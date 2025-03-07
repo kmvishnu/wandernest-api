@@ -31,8 +31,8 @@ model Hotel {
   rating         Float
   totalRooms     Int
   availableRooms Int
-  imageUrls      String[]
-  amenities      String[]
-  policies       String[]
-  reviews        String[]
+  imageUrls      Json    
+  amenities      Json    
+  policies       Json    
+  reviews        Json    
 }
