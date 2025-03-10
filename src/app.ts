@@ -15,6 +15,8 @@ app.use(securityMiddlewares.cors());
 
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use("/v1", appRoutes);
 
 app.get("/healthCheck", (req: Request, res: Response) => {
