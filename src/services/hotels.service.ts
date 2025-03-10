@@ -33,6 +33,28 @@ export class HotelService {
     });
   }
 
+  async updateHotel(id: string, data: Partial<{
+    name: string;
+    description: string;
+    location: string;
+    price: number;
+    contact: string;
+    rating: number;
+    totalRooms: number;
+    availableRooms: number;
+    imageUrls: string[];
+    amenities: string[];
+    policies: string[];
+    reviews: string[];
+  }>) {
+    return prisma.hotel.update({
+      where: { id },
+      data: {
+        ...data,
+      },
+    });
+  }
+
   async getHotelById(id: string) {
     return prisma.hotel.findUnique({
       where: { id },
@@ -48,6 +70,12 @@ export class HotelService {
   async getHotelByLocation(location: string) {
     return prisma.hotel.findMany({
       where: { location },
+    });
+  }
+
+  async removeHotel(id: string) {
+    return prisma.hotel.delete({
+      where: { id },
     });
   }
 }
