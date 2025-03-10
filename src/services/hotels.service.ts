@@ -63,14 +63,43 @@ export class HotelService {
 
   async getHotelByName(name: string) {
     return prisma.hotel.findMany({
-      where: { name },
+      where: {
+        name: {
+          contains: name,
+          mode: 'insensitive',
+        },
+      },
     });
   }
 
   async getHotelByLocation(location: string) {
     return prisma.hotel.findMany({
-      where: { location },
+      where: {
+        location: {
+          contains: location,
+          mode: 'insensitive',
+        },
+      },
     });
+  }
+
+  async getHotelByNameAndLocation(name: string, location: string) {
+    return prisma.hotel.findMany({
+      where: {
+        name: {
+          contains: name,
+          mode: 'insensitive',
+        },
+        location: {
+          contains: location,
+          mode: 'insensitive',
+        },
+      },
+    });
+  }
+
+  async getAllHotels() {
+    return prisma.hotel.findMany();
   }
 
   async removeHotel(id: string) {

@@ -1,7 +1,7 @@
 import multer from "multer";
 import cloudinary from "../../config/cloudinaryConfig";
 import { Request, Response, NextFunction } from "express";
-import { createHotel, updateHotel, removeHotel } from "../../components/v1/hotelComponent";
+import { createHotel, updateHotel, removeHotel, getHotels } from "../../components/v1/hotelComponent";
 import { AddHotelSchema, EditHotelSchema } from "../../types/request.types";
 
 const upload = multer({ storage: multer.memoryStorage() });
@@ -128,6 +128,22 @@ export const deleteHotel = async (
     await removeHotel(id);
 
     res.status(200).json({ status: "success", message: "Hotel deleted successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getHotel = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const criteria = req.body;
+
+    const hotels = await getHotels(criteria);
+
+    res.status(200).json({ status: "success", hotels });
   } catch (error) {
     next(error);
   }
