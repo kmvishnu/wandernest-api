@@ -49,6 +49,21 @@ export const EditHotelSchema = z.object({
   imageUrls: z.array(z.string()).optional(),
 });
 
+export const AddBookingSchema = z.object({
+  hotelId: z.string().uuid("Invalid hotel ID"),
+  checkIn: z.string().refine((val) => !isNaN(Date.parse(val)), {
+    message: "Invalid date format",
+  }),
+  checkOut: z.string().refine((val) => !isNaN(Date.parse(val)), {
+    message: "Invalid date format",
+  }),
+  members: z.array(
+    z.object({
+      name: z.string(),
+      aadhar: z.string().nullable().optional(),
+    })
+  ),
+});
 
 
 export type LoginRequest = z.infer<typeof LoginRequestSchema>;

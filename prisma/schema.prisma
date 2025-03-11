@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -19,10 +13,12 @@ model User {
   name      String
   password  String
   createdAt DateTime @default(now())
+
+  bookings Booking[]
 }
 
 model Hotel {
-  id             String   @id @default(uuid())
+  id             String @id @default(uuid())
   name           String
   description    String
   location       String
@@ -31,8 +27,38 @@ model Hotel {
   rating         Float
   totalRooms     Int
   availableRooms Int
-  imageUrls      Json    
-  amenities      Json    
-  policies       Json    
-  reviews        Json    
+  imageUrls      Json
+  amenities      Json
+  policies       Json
+  reviews        Json
+
+  bookings Booking[]
+}
+
+model Booking {
+  id           String   @id @default(uuid())
+  hotelId      String
+  userId       Int
+  checkInDate  DateTime
+  checkOutDate DateTime
+  members      Json 
+
+  hotel    Hotel     @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  checkIns CheckIn[]
+}
+
+model CheckIn {
+  id        String   @id @default(uuid())
+  bookingId String   @unique
+  booking   Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  members   Member[] // ✅ Relation to Member (One CheckIn → Many Members)
+}
+
+model Member {
+  id        String   @id @default(uuid())
+  checkInId String
+  checkIn   CheckIn  @relation(fields: [checkInId], references: [id], onDelete: Cascade) // ✅ Back-relation
+  name      String
+  aadhar    String
 }
