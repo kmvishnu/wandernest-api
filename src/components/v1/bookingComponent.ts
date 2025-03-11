@@ -39,3 +39,19 @@ export const getBookingsComponent = async (userId: number): Promise<any> => {
     );
   }
 }
+
+export const cancelBookingComponent = async (bookingId: string): Promise<any> => {
+  const bookingService = new BookingService();
+
+  try {
+    const bookings = await bookingService.cancelBooking(bookingId);
+    return bookings;
+  } catch (error) {
+    console.error("Error canceling booking:", error);
+    throw new AppError(
+      HttpStatusCode.INTERNAL_SERVER,
+      "database_error",
+      "Failed to cancel booking"
+    );
+  }
+}

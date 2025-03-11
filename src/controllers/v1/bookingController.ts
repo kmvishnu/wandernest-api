@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { AddBookingSchema } from "../../types/request.types";
 import { HttpStatusCode } from "../../types/errors";
-import { bookHotelComponent, getBookingsComponent } from "../../components/v1/bookingComponent";
+import { bookHotelComponent, cancelBookingComponent, getBookingsComponent } from "../../components/v1/bookingComponent";
 
 export const bookHotel = async (
   req: Request,
@@ -44,3 +44,21 @@ export const getBookings = async (
     next(error);
   }
 };
+
+export const cancelBooking = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const user = req.user; 
+    const { id } = req.query;
+    const bookings = await cancelBookingComponent(id as string); 
+    res.status(HttpStatusCode.OK).json({
+      status: "success",
+      bookings,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
