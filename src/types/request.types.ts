@@ -58,6 +58,7 @@ export const EditHotelSchema = z.object({
 
 export const AddBookingSchema = z.object({
   hotelId: z.string().uuid("Invalid hotel ID"),
+  hotelName: z.string(),
   checkIn: z.string().refine((val) => !isNaN(Date.parse(val)), {
     message: "Invalid date format",
   }),
@@ -78,7 +79,9 @@ export const AddCheckInSchema = z.object({
   members: z.array(
     z.object({
       name: z.string(),
-      aadhar: z.string().regex(/^\d{12}$/, "Aadhar number must be a 12-digit number"),
+      aadhar: z
+        .string()
+        .regex(/^\d{12}$/, "Aadhar number must be a 12-digit number"),
       age: z.number().int().positive("Age must be a positive integer"),
     })
   ),

@@ -1,4 +1,3 @@
-import exp from "constants";
 import { CheckInService } from "../../services/checkIn.service";
 import { AppError, HttpStatusCode } from "../../types/errors";
 
@@ -37,7 +36,9 @@ export const getCheckInsComponent = async (bookingId: string): Promise<any> => {
   }
 };
 
-export const cancelCheckInComponent = async (checkInId: string): Promise<any> => {
+export const cancelCheckInComponent = async (
+  checkInId: string
+): Promise<any> => {
   const checkInService = new CheckInService();
 
   try {
@@ -51,4 +52,4 @@ export const cancelCheckInComponent = async (checkInId: string): Promise<any> =>
       "Failed to cancel check in"
     );
   }
-}
+};

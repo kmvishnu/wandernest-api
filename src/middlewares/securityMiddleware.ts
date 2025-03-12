@@ -16,8 +16,11 @@ const configureRateLimiter = () => {
 
 const configureCors = () => {
   const corsOptions = {
-    origin: "*",
+    origin: (origin, callback) => {
+      callback(null, true);
+    },
     methods: "GET,POST,PUT,DELETE",
+    credentials: true,
   };
   return cors(corsOptions);
 };

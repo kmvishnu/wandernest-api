@@ -4,15 +4,23 @@ import { AppError, HttpStatusCode } from "../../types/errors";
 
 export const bookHotelComponent = async (
   hotelId: string,
-    checkIn: string,
-    checkOut: string,
-    members: any[],
-    userId: number
+  hotelName: string,
+  checkIn: string,
+  checkOut: string,
+  members: any[],
+  userId: number
 ): Promise<any> => {
   const bookingService = new BookingService();
 
   try {
-    const booking = await bookingService.bookHotel(hotelId,userId, checkIn, checkOut, members);
+    const booking = await bookingService.bookHotel(
+      hotelId,
+      hotelName,
+      userId,
+      checkIn,
+      checkOut,
+      members
+    );
     return booking;
   } catch (error) {
     console.error("Error booking hotel:", error);
@@ -22,7 +30,7 @@ export const bookHotelComponent = async (
       "Failed to book hotel"
     );
   }
-}
+};
 
 export const getBookingsComponent = async (userId: number): Promise<any> => {
   const bookingService = new BookingService();
@@ -38,9 +46,11 @@ export const getBookingsComponent = async (userId: number): Promise<any> => {
       "Failed to get bookings"
     );
   }
-}
+};
 
-export const cancelBookingComponent = async (bookingId: string): Promise<any> => {
+export const cancelBookingComponent = async (
+  bookingId: string
+): Promise<any> => {
   const bookingService = new BookingService();
 
   try {
@@ -54,4 +64,4 @@ export const cancelBookingComponent = async (bookingId: string): Promise<any> =>
       "Failed to cancel booking"
     );
   }
-}
+};

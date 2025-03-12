@@ -3,19 +3,21 @@ import prisma from "../db";
 export class BookingService {
   async bookHotel(
     hotelId: string,
+    hotelName: string,
     userId: number,
     checkIn: string,
     checkOut: string,
-    members: { name: string;age:number; aadhar?: string }[]
+    members: { name: string; age: number; aadhar?: string }[]
   ) {
     const booking = await prisma.booking.create({
       data: {
         hotelId,
+        hotelName,
         userId,
         checkInDate: new Date(checkIn),
         checkOutDate: new Date(checkOut),
-        members: members
-      }
+        members: members,
+      },
     });
 
     return booking;
@@ -27,10 +29,10 @@ export class BookingService {
       include: {
         checkIns: {
           include: {
-            members: true
-          }
-        }
-      }
+            members: true,
+          },
+        },
+      },
     });
 
     return booking;
@@ -38,7 +40,7 @@ export class BookingService {
 
   async getBookings(userId: number) {
     const bookings = await prisma.booking.findMany({
-      where: { userId }
+      where: { userId },
     });
 
     return bookings;

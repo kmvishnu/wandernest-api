@@ -38,10 +38,13 @@ model Hotel {
 model Booking {
   id           String   @id @default(uuid())
   hotelId      String
+  hotelName    String   
   userId       Int
   checkInDate  DateTime
   checkOutDate DateTime
-  members      Json 
+  members      Json
+  bookedOn     DateTime @default(now()) 
+  isCheckedIn  Boolean  @default(false)
 
   hotel    Hotel     @relation(fields: [hotelId], references: [id], onDelete: Cascade)
   user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)

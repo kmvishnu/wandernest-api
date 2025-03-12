@@ -1,7 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import { AddBookingSchema } from "../../types/request.types";
 import { HttpStatusCode } from "../../types/errors";
-import { bookHotelComponent, cancelBookingComponent, getBookingsComponent } from "../../components/v1/bookingComponent";
+import {
+  bookHotelComponent,
+  cancelBookingComponent,
+  getBookingsComponent,
+} from "../../components/v1/bookingComponent";
 
 export const bookHotel = async (
   req: Request,
@@ -10,10 +14,11 @@ export const bookHotel = async (
 ) => {
   try {
     const validatedData = AddBookingSchema.parse(req.body);
-    const user = req.user; // Access the user property directly
-    const { hotelId, checkIn, checkOut, members } = validatedData;
+    const user = req.user;
+    const { hotelId, hotelName, checkIn, checkOut, members } = validatedData;
     const booking = await bookHotelComponent(
       hotelId,
+      hotelName,
       checkIn,
       checkOut,
       members,
@@ -34,8 +39,8 @@ export const getBookings = async (
   next: NextFunction
 ) => {
   try {
-    const user = req.user; 
-    const bookings = await getBookingsComponent(user.id); 
+    const user = req.user;
+    const bookings = await getBookingsComponent(user.id);
     res.status(HttpStatusCode.OK).json({
       status: "success",
       bookings,
@@ -51,9 +56,9 @@ export const cancelBooking = async (
   next: NextFunction
 ) => {
   try {
-    const user = req.user; 
+    const user = req.user;
     const { id } = req.query;
-    const bookings = await cancelBookingComponent(id as string); 
+    const bookings = await cancelBookingComponent(id as string);
     res.status(HttpStatusCode.OK).json({
       status: "success",
       bookings,
@@ -61,4 +66,4 @@ export const cancelBooking = async (
   } catch (error) {
     next(error);
   }
-}
+};
