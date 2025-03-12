@@ -6,7 +6,7 @@ export class BookingService {
     userId: number,
     checkIn: string,
     checkOut: string,
-    members: { name: string; aadhar?: string }[]
+    members: { name: string;age:number; aadhar?: string }[]
   ) {
     const booking = await prisma.booking.create({
       data: {

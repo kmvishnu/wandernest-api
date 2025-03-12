@@ -52,13 +52,14 @@ model CheckIn {
   id        String   @id @default(uuid())
   bookingId String   @unique
   booking   Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
-  members   Member[] // ✅ Relation to Member (One CheckIn → Many Members)
+  members   Member[] // Relation to Member (One CheckIn → Many Members)
 }
 
 model Member {
   id        String   @id @default(uuid())
   checkInId String
-  checkIn   CheckIn  @relation(fields: [checkInId], references: [id], onDelete: Cascade) // ✅ Back-relation
+  checkIn   CheckIn  @relation(fields: [checkInId], references: [id], onDelete: Cascade) // Back-relation
   name      String
-  aadhar    String
+  age       Int
+  aadhar    String?
 }
