@@ -68,8 +68,12 @@ export const AddBookingSchema = z.object({
   members: z.array(
     z.object({
       name: z.string(),
-      age: z.string().regex(/^\d{12}$/, "Age must be a 12-digit number"),
-      aadhar: z.string().nullable().optional(),
+      aadhar: z
+        .string()
+        .regex(/^\d{12}$/, "Aadhar number must be a 12-digit number")
+        .nullable()
+        .optional(),
+      age: z.number().int().positive("Age must be a positive integer"),
     })
   ),
 });

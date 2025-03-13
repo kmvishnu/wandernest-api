@@ -8,8 +8,8 @@ const configureHelmet = () => {
 
 const configureRateLimiter = () => {
   return rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 30, // limit each IP to 30 requests per window
+    windowMs: 30 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP to 30 requests per window
     message: "Too many requests, please try again later.",
   });
 };

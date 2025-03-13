@@ -41,6 +41,9 @@ export class BookingService {
   async getBookings(userId: number) {
     const bookings = await prisma.booking.findMany({
       where: { userId },
+      include: {
+        hotel: true, 
+      },
     });
 
     return bookings;
